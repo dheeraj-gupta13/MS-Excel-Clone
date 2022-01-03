@@ -1,5 +1,6 @@
 *{
     box-sizing: border-box;
+    font-family: monospace;
 }
 body{
     padding: 0;
@@ -28,6 +29,10 @@ body{
 .tool-action-cont>*{
     display: inline-block;
     margin-right: 1rem;
+}
+
+.tool-action-cont>*:hover{
+    cursor: pointer;
 }
 
 .font-style-prop{
@@ -115,7 +120,7 @@ body{
     width: 2rem;
     background-color: #747d8c;
     position: fixed;
-    z-index: 1;
+    z-index: 2;
 }
 
 .address-col-cont{
@@ -165,4 +170,17 @@ body{
     border: 1px solid #dfe4ea;
     outline: none;
     padding: 0.3rem;
+}
+
+.color-picker{
+    position: relative;
+}
+
+.color-picker>input{
+    position:absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    width: 100%;
+    opacity: 0;
 }

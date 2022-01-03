@@ -31,9 +31,13 @@ for(let i = 0; i < row; i++){
         let singleCell = document.createElement("div");
         singleCell.setAttribute("class", "single-cell");
         singleCell.setAttribute("contenteditable", "true");
+        singleCell.setAttribute("spellcheck", "false");
+
+        // For cell identification, so that we could access data from sheetDB
+        singleCell.setAttribute("rid", i);
+        singleCell.setAttribute("cid", j);
 
         singleCol.appendChild(singleCell);
-
         addressBarDisplay(singleCell,i,j);
     }
 
@@ -41,12 +45,14 @@ for(let i = 0; i < row; i++){
 }
 
 function addressBarDisplay(cell, row, col){
-
     cell.addEventListener("click",()=>{
         let colID = String.fromCharCode(65 + col);
         let rowID = row+1;
       
         addressBar.value =  `${colID}${rowID}`;
     });
-    
 }
+
+// When we open the sheet, by default click on first cell
+let firstCell = document.querySelector(".single-cell");
+firstCell.click();
