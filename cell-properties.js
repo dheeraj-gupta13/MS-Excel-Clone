@@ -21,9 +21,9 @@ for(let i = 0; i < row ; i++){
             fontSize: "14",
             fontColor: "#000000",
             BGcolor: "#ecf0f1",  // Just for indication purpose,
-            // value: "",
-            // formula: "",
-            // children: [],
+            value: "",
+            formula: "",
+            children: [],
         }
         sheetRow.push(cellProp);
     }
