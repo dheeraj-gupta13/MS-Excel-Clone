@@ -7,7 +7,18 @@ for(let i = 0; i < row; i++){
             let [activeCell, cellProp] = getActiveCell(address);
 
             let  enteredData = activeCell.innerText;
+
+            if(enteredData === cellProp.value){
+                return;
+            } 
+
             cellProp.value = enteredData;
+
+            // If data modifies, remove Parent-Child relationship , formula empty
+            // update children with new hardcoded (modified) value.
+            removeChildToParent(cellProp.formula);
+            cellProp.formula = "";
+            updateChildrenCells(address);
         });
     }
 }
@@ -19,16 +30,78 @@ let formulaBar = document.querySelector(".formula-bar");
 formulaBar.addEventListener("keydown",(e)=>{
     let inputExpression = formulaBar.value;
     if(e.key === "Enter" && inputExpression){
-        let evaluatedAns =  evaluate(inputExpression);
 
-        setUIAndCellProp(evaluatedAns,inputExpression);
+        let address = addressBar.value;
+        let [cell, cellProp] = getActiveCell(address);
+        if(inputExpression !== cellProp.formula){
+            removeChildToParent(cellProp.formula);
+        }
+
+        let evaluatedAns = evaluate(inputExpression);
+
+        setUIAndCellProp(evaluatedAns,inputExpression, address);
+        addChildToParent(inputExpression);
+
+        updateChildrenCells(address);
     }
 });
+
+
+// Add the parent - child relationship.
+function addChildToParent(formula){
+    let encodedString = formula.split(" ");
+
+    let childAddress = addressBar.value;
+    for(let i = 0; i < encodedString.length; i++){
+        let ascii = encodedString[i].charCodeAt(0);
+        if(ascii >= 65 && ascii <= 90){
+
+            let [parentCell, parentCellProp] = getActiveCell(encodedString[i]);
+            parentCellProp.children.push(childAddress);
+        }
+    }
+}
+
+
+function updateChildrenCells(parentAddress){
+    let [parentCell, parentCellProp] = getActiveCell(parentAddress);
+    let children = parentCellProp.children;
+
+    for(let i = 0; i < children.length; i++){
+        let childrenAddress = children[i];
+
+        let [childrenCell, childrenCellProp] = getActiveCell(childrenAddress);
+        let childFormula = childrenCellProp.formula;
+
+        let evaluatedAns =  evaluate(childFormula);
+        setUIAndCellProp(evaluatedAns,childFormula, childrenAddress);
+
+        updateChildrenCells(childrenAddress);
+    }
+}
+
+
+// Remove the parent - child relationship. 
+function removeChildToParent(formula){
+    let encodedString = formula.split(" ");
+    let childAddress = addressBar.value;
+    for(let i = 0; i < encodedString.length; i++){
+        let ascii = encodedString[i].charCodeAt(0);
+        if(ascii >= 65 && ascii <= 90){
+
+            let [parentCell, parentCellProp] = getActiveCell(encodedString[i]);
+            let idx = parentCellProp.children.indexOf(childAddress);
+            parentCellProp.children.splice(idx,1);
+        }
+    }
+}
+
 
 function evaluate(s) {
     let ans = decodeFormula(s);
     return eval(ans);
 }
+
 
 function decodeFormula(s){
     let FormulaArr = s.split(" ");
@@ -50,8 +123,7 @@ function decodeFormula(s){
 }
 
 
-function setUIAndCellProp(evaluatedAns, formula){
-    let address = addressBar.value;
+function setUIAndCellProp(evaluatedAns, formula, address){
     let [activeCell, cellProp] = getActiveCell(address);
 
     // UI Update
