@@ -27,7 +27,7 @@ for(let i = 0; i < row; i++){
 // Enter a string in Formula bar, press Enter, evaluate it,
 // and made changes in UI and cellProp...
 let formulaBar = document.querySelector(".formula-bar");
-formulaBar.addEventListener("keydown",(e)=>{
+formulaBar.addEventListener("keydown", async (e)=>{
     let inputExpression = formulaBar.value;
     if(e.key === "Enter" && inputExpression){
 
@@ -37,14 +37,67 @@ formulaBar.addEventListener("keydown",(e)=>{
             removeChildToParent(cellProp.formula);
         }
 
+        // We need to create a edge between variable in "inputExpression"
+        // and address (address is the current position of pointer).
+        addChildToGraphComponent(inputExpression, address);
+
+        // check weather the added edge has created an cycle or not
+        
+        let cycleResponse = isGraphCyclic(graphComponentMatrix);
+        // [i,j] -> Yes, graph is cyclic and cycle is at sheetDb[i][j]
+        // null -> No, graph is not cyclic
+        if(cycleResponse){
+            let response = confirm("Your formula is cyclic. Do you want to trace path ?");
+
+            while(response){
+                // Keep on tracing the cycle.
+                await isGraphCyclicTracePath(graphComponentMatrix, cycleResponse);
+                response = confirm("Your formula is cyclic. Do you want to trace path ?");
+            }
+
+            removeChildToGraphComponent(inputExpression, address)
+            return;
+        }
+        
         let evaluatedAns = evaluate(inputExpression);
 
+        // To update UI and cellProp in DB
         setUIAndCellProp(evaluatedAns,inputExpression, address);
         addChildToParent(inputExpression);
 
         updateChildrenCells(address);
     }
 });
+
+function addChildToGraphComponent(formula, childAddress){
+    let encodedString = formula.split(" ");
+
+    let [crid, ccid] = decodeRidCid(childAddress);
+    for(let i = 0; i < encodedString.length; i++){
+        let ascii = encodedString[i].charCodeAt(0);
+        if(ascii >= 65 && ascii <= 90){
+            let [prid, pcid] = decodeRidCid(encodedString[i]);
+
+            graphComponentMatrix[prid][pcid].push([crid,ccid]) ;
+        }
+    }
+}
+
+
+function removeChildToGraphComponent(formula, childAddress){
+    let encodedString = formula.split(" ");
+
+    let [crid, ccid] = decodeRidCid(childAddress);
+    for(let i = 0; i < encodedString.length; i++){
+        let ascii = encodedString[i].charCodeAt(0);
+        if(ascii >= 65 && ascii <= 90){
+            let [prid, pcid] = decodeRidCid(encodedString[i]);
+
+            // let idx = graphComponentMatrix[prid][pcid].indexOf([crid,ccid]) ;
+            graphComponentMatrix[prid][pcid].pop();
+        }
+    }
+}
 
 
 // Add the parent - child relationship.
