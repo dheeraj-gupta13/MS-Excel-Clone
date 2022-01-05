@@ -89,8 +89,13 @@ body{
 .sheets-action-cont>*{
     display: inline-block;
 }
+
 .add-icon{
     width: 2vw;
+}
+
+.add-icon:hover{
+    cursor: default;
 }
 
 .sheet-folder-cont{
@@ -98,7 +103,8 @@ body{
     width: calc( 100vw - 2vw );
     margin-left: 1rem;
     display: flex;
-    align-items: center
+    align-items: center;
+    overflow: auto;
 }
 
 .sheet-folder{
@@ -106,6 +112,17 @@ body{
     font-weight: bold;
     text-decoration-thickness: 3px;
     font-size: 0.9rem;
+    height: 80%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.sheet-content{
+    width: 5rem;
+    padding-left: 0.7rem;
+    padding-bottom: 0.5rem;
+    cursor: default;
 }
 
 .grid-cont{

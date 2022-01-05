@@ -53,6 +53,3 @@ function addressBarDisplay(cell, row, col){
     });
 }
 
-// When we open the sheet, by default click on first cell
-let firstCell = document.querySelector(".single-cell");
-firstCell.click();

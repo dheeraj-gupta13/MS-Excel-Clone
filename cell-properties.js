@@ -1,3 +1,6 @@
+containerSheetDB = [];
+
+
 // We need to store the information of each cell.  
 // information such as , is the cell is bold, italic,.. What is alignment
 // In order to store info of each cell , we will use 2D array -> "sheetDB"
@@ -5,33 +8,39 @@
 // Array of Arrays containing information of a particular block.
 let sheetDB = [];
 
-// We will iterate to each row.
-for(let i = 0; i < row ; i++){
-    // Each row has 26 cols, from 1 to 26
-    // so we will store info in "sheetRow".
-    // sheetRow is the array of objects.
-    let sheetRow = [];
-    for(let j = 0; j < col; j++){
-        let cellProp = {
-            bold: false,
-            italic: false,
-            underline: false,
-            alignment: "left",
-            fontStyle: "monospace",
-            fontSize: "14",
-            fontColor: "#000000",
-            BGcolor: "#ecf0f1",  // Just for indication purpose,
-            value: "",
-            formula: "",
-            children: [],
-        }
-        sheetRow.push(cellProp);
-    }
-    sheetDB.push(sheetRow);
-}
+// // We will iterate to each row.
+// for(let i = 0; i < row ; i++){
+//     // Each row has 26 cols, from 1 to 26
+//     // so we will store info in "sheetRow".
+//     // sheetRow is the array of objects.
+//     let sheetRow = [];
+//     for(let j = 0; j < col; j++){
+//         let cellProp = {
+//             bold: false,
+//             italic: false,
+//             underline: false,
+//             alignment: "left",
+//             fontStyle: "monospace",
+//             fontSize: "14",
+//             fontColor: "#000000",
+//             BGcolor: "#ecf0f1",  // Just for indication purpose,
+//             value: "",
+//             formula: "",
+//             children: [],
+//         }
+//         sheetRow.push(cellProp);
+//     }
+//     sheetDB.push(sheetRow);
+// }
 
 // cellProp is the object containing information of single-cell. 
 
+
+{
+    const addSheetBtn = document.querySelector(".add-icon");
+    addSheetBtn.click();
+    // handleSheetProperties();
+}
 
 // Selectors for cell properties
 const bold = document.querySelector(".bold");
@@ -221,7 +230,7 @@ function addListenerToDefaultCell(cell) {
 
         let formulaBar = document.querySelector(".formula-bar");
         formulaBar.value = cellProp.formula;
-        cell.value = cellProp.value;
+        cell.innerText = cellProp.value;
     });
 }
 

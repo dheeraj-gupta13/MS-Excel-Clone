@@ -1,13 +1,15 @@
 // A 2-D Matrix for storing the cell number of it's children.
+
+let collectedGraphComponentMatrix = [];
 let graphComponentMatrix = [];
 
-for(let i = 0; i < row; i++){
-    let rowMatrix = []; // Array for each row.
-    for(let j = 0; j < col; j++){
-        rowMatrix.push([]); // Each cell will contain about it's children.
-    }
-    graphComponentMatrix.push(rowMatrix); 
-}
+// for(let i = 0; i < row; i++){
+//     let rowMatrix = []; // Array for each row.
+//     for(let j = 0; j < col; j++){
+//         rowMatrix.push([]); // Each cell will contain about it's children.
+//     }
+//     graphComponentMatrix.push(rowMatrix); 
+// }
 
 
 // True -> yes, graph is cyclic 
